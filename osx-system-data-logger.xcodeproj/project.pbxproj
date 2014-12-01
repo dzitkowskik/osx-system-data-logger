@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9F67BBFF1A268F3D009EAE56 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F67BBFE1A268F3D009EAE56 /* main.cpp */; };
+		9F67BBFF1A268F3D009EAE56 /* smc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F67BBFE1A268F3D009EAE56 /* smc.cpp */; };
+		9F67BC071A269045009EAE56 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F67BC061A269045009EAE56 /* IOKit.framework */; };
+		9F8A3C461A2D18A3000CF298 /* converters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F8A3C441A2D18A3000CF298 /* converters.cpp */; };
+		9F8A3C481A2D2B82000CF298 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F8A3C471A2D2B82000CF298 /* main.cpp */; };
+		9F8A3C4B1A2D2C15000CF298 /* files_management.c in Sources */ = {isa = PBXBuildFile; fileRef = 9F8A3C491A2D2C15000CF298 /* files_management.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +28,14 @@
 
 /* Begin PBXFileReference section */
 		9F67BBFB1A268F3D009EAE56 /* osx-system-data-logger */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "osx-system-data-logger"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9F67BBFE1A268F3D009EAE56 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		9F67BBFE1A268F3D009EAE56 /* smc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = smc.cpp; sourceTree = "<group>"; };
+		9F67BC051A269012009EAE56 /* smc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = smc.h; sourceTree = "<group>"; };
+		9F67BC061A269045009EAE56 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		9F8A3C441A2D18A3000CF298 /* converters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = converters.cpp; sourceTree = "<group>"; };
+		9F8A3C451A2D18A3000CF298 /* converters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = converters.h; sourceTree = "<group>"; };
+		9F8A3C471A2D2B82000CF298 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		9F8A3C491A2D2C15000CF298 /* files_management.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = files_management.c; sourceTree = "<group>"; };
+		9F8A3C4A1A2D2C15000CF298 /* files_management.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = files_management.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F67BC071A269045009EAE56 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +53,7 @@
 		9F67BBF21A268F3D009EAE56 = {
 			isa = PBXGroup;
 			children = (
+				9F67BC061A269045009EAE56 /* IOKit.framework */,
 				9F67BBFD1A268F3D009EAE56 /* osx-system-data-logger */,
 				9F67BBFC1A268F3D009EAE56 /* Products */,
 			);
@@ -57,7 +70,13 @@
 		9F67BBFD1A268F3D009EAE56 /* osx-system-data-logger */ = {
 			isa = PBXGroup;
 			children = (
-				9F67BBFE1A268F3D009EAE56 /* main.cpp */,
+				9F8A3C491A2D2C15000CF298 /* files_management.c */,
+				9F8A3C4A1A2D2C15000CF298 /* files_management.h */,
+				9F67BBFE1A268F3D009EAE56 /* smc.cpp */,
+				9F67BC051A269012009EAE56 /* smc.h */,
+				9F8A3C441A2D18A3000CF298 /* converters.cpp */,
+				9F8A3C451A2D18A3000CF298 /* converters.h */,
+				9F8A3C471A2D2B82000CF298 /* main.cpp */,
 			);
 			path = "osx-system-data-logger";
 			sourceTree = "<group>";
@@ -118,7 +137,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F67BBFF1A268F3D009EAE56 /* main.cpp in Sources */,
+				9F8A3C461A2D18A3000CF298 /* converters.cpp in Sources */,
+				9F67BBFF1A268F3D009EAE56 /* smc.cpp in Sources */,
+				9F8A3C4B1A2D2C15000CF298 /* files_management.c in Sources */,
+				9F8A3C481A2D2B82000CF298 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +254,7 @@
 				9F67BC041A268F3D009EAE56 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
