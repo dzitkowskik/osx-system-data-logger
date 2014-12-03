@@ -7,6 +7,7 @@
 //
 
 #include "files_management.h"
+#include "errors.h"
 #define N 1024
 
 int SafeRead(int fd, char* buf, size_t size)
@@ -39,7 +40,7 @@ ssize_t SafeWrite(int fd, char* buf, size_t size)
 		charWritten = (int)TEMP_FAILURE_RETRY(write(fd, buf, size));
 		if(charWritten < 0)
 		{
-			fprintf(stderr, "Błąd podczas pisania do pliku\n Error = %s\n", strerror(errno));
+			fprintf(stderr, "Error in SafeWrite: Error = %s\n", strerror(errno));
 			return charWritten;
 		}
 		buf += charWritten;
@@ -50,9 +51,21 @@ ssize_t SafeWrite(int fd, char* buf, size_t size)
 	return charWritten;
 }
 
-//flags: O_RDONLY, O_WRONLY, O_RDWR
+ssize_t SafeWriteLine(int fd, char* buf, size_t size)
+{
+    ssize_t charWritten = SafeWrite(fd, buf, size);
+    ssize_t end_line = TEMP_FAILURE_RETRY(write(fd, "\n", 1));
+    if(end_line < 0)
+    {
+        fprintf(stderr, "Error in SafeWriteLine: Error = %s\n", strerror(errno));
+        return charWritten;
+    }
+    return charWritten;
+}
+
 int OpenFile(char* path, int flags)
 {
+    //flags: O_RDONLY, O_WRONLY, O_RDWR
 	mode_t mode = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH;
 	int fd = (int)TEMP_FAILURE_RETRY(open(path, flags, mode));
 	if(-1 == fd)
@@ -69,8 +82,8 @@ int OpenFile(char* path, int flags)
 
 int CreateDir(char* dirName)
 {
-	//Permissions Owner - Read, Write, Execute; Group - Read, Execute; Others - Read
-	mode_t mode = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH;
+	// Permissions read/write/search permissions for owner and group, and with read/search permissions for others
+	mode_t mode = S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH;
 	if(-1 == mkdir(dirName, mode))
 	{
 		fprintf(stderr, "Error occured when creating directory: %s\n Error code = %d\n", dirName, errno);
@@ -85,6 +98,131 @@ int CreateDir(char* dirName)
 		return -1;
 	}
 	return 0;
+}
+
+int CreateDirIfNotExists(char* dirName)
+{
+    if (0 != access(dirName, F_OK))
+    {
+        if (ENOENT == errno) { // if file does not exist
+            if(-1 == CreateDir(dirName)) return -1;
+        }
+        if (ENOTDIR == errno) {
+            fprintf(stderr, "Not a directory!\n");
+            return -1;
+        }
+    }
+    return 0;
+}
+
+int CreateDirInPathAndBackToCurrentDir(char* dirName, char* path, char* currentDir)
+{
+    if(-1 == ChangeDirectory(path)) return -1;
+    if (0 != access(dirName, F_OK))
+    {
+        if (ENOENT == errno) { // if file does not exist
+            if(-1 == CreateDir(dirName)) return -1;
+        }
+        if (ENOTDIR == errno) {
+            fprintf(stderr, "Not a directory!\n");
+            return -1;
+        }
+    }
+    if(-1 == ChangeDirectory(currentDir)) return -1;
+    return 0;
+}
+
+int CreateDirInPath(char* dirName, char* path)
+{
+    int returnValue = 0;
+    char* currentDir = GetCurrentPath();
+    if(currentDir)
+    {
+        returnValue = CreateDirInPathAndBackToCurrentDir(dirName, path, currentDir);
+        free(currentDir);
+        return returnValue;
+    }
+    return -1;
+}
+
+int CreateDirRecursive(const char *dir)
+{
+    if(NULL == dir) return -1;
+    char *tmp = (char*)malloc(strlen(dir)*sizeof(char));
+    if(NULL == tmp) return -1;
+    
+    char *p = NULL;
+    size_t len;
+    snprintf(tmp, sizeof(tmp),"%s",dir);
+    len = strlen(tmp);
+    if(tmp[len - 1] == '/')
+        tmp[len - 1] = 0;
+    for(p = tmp + 1; *p; p++)
+        if(*p == '/')
+        {
+            *p = 0;
+            mkdir(tmp, S_IRWXU);
+            *p = '/';
+        }
+    mkdir(tmp, S_IRWXU);
+    return 0;
+}
+
+char* GetCurrentPath()
+{
+    size_t size = 100;
+    while(1)
+    {
+        char *buffer = (char *)malloc(size);
+        if (getcwd (buffer, size) == buffer)
+            return buffer;
+        free(buffer);
+        if (errno != ERANGE)
+            return 0;
+        size *= 2;
+    }
+}
+
+char* AllocCombinedPath(const char *path1, const char *path2)
+{
+    size_t size = 1;
+    if (path1 && *path1) size += strlen(path1);
+    if (path2 && *path2) size += strlen(path2);
+    return malloc(size*sizeof(char));
+}
+
+void CombinePaths(char *destination, const char *path1, const char *path2)
+{
+    if (path1 && *path1)
+    {
+        size_t len = strlen(path1);
+        strcpy(destination, path1);
+        
+        if (destination[len - 1] == DIR_SEPARATOR)
+        {
+            if (path2 && *path2)
+            {
+                strcpy(destination + len, (*path2 == DIR_SEPARATOR) ? (path2 + 1) : path2);
+            }
+        }
+        else
+        {
+            if (path2 && *path2)
+            {
+                if (*path2 == DIR_SEPARATOR)
+                    strcpy(destination + len, path2);
+                else
+                {
+                    destination[len] = DIR_SEPARATOR;
+                    strcpy(destination + len + 1, path2);
+                }
+            }
+        }
+    }
+    else if (path2 && *path2)
+        strcpy(destination, path2);
+    else
+        destination[0] = '\0';
 }
 
 int CreateFile(char* name)
@@ -273,16 +411,16 @@ struct dirent* ReadDirectory(DIR *dirp)
 	return dp;
 }
 
-//STATS of file
-//struct stat contains:
-//st_mode - permissions
-//st_nlink - count of hard links
-//st_uid - owners id
-//st_gid - group id
-//st_size - size of file
-// and more... see: http://en.wikipedia.org/wiki/Stat_(system_call)
 void PrintfFileStats(struct dirent *dp)
 {
+    //STATS of file
+    //struct stat contains:
+    //st_mode - permissions
+    //st_nlink - count of hard links
+    //st_uid - owners id
+    //st_gid - group id
+    //st_size - size of file
+    // and more... see: http://en.wikipedia.org/wiki/Stat_(system_call)
 	struct stat     statbuf;
 	struct passwd  *pwd;
 	struct group   *grp;
@@ -371,7 +509,7 @@ char* ReadLineFromStream(FILE* file)
 			fprintf(stderr, "Error occured while reading from file\n Error = %s\n", strerror(errno));
 		}
 	}
-	return line;
+	return strdup(line);
 }
 
 struct dirent* GetFileDirent(char* path, char* name)

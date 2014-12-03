@@ -75,8 +75,8 @@
 #define SMC_KEY_GPU_TEMP                "TG0P"
 #define SMC_KEY_FAN_1                   "F0Ac"
 #define SMC_KEY_FAN_2                   "F1Ac"
-#define SMC_BATTERY_TEMP                "TB0T"
-#define SMC_CORE_VOLTAGE                "VC0C"
+#define SMC_KEY_BATTERY_TEMP            "TB0T"
+#define SMC_KEY_CORE_VOLTAGE            "VC0C"
 
 typedef struct {
     char                  major;
@@ -123,10 +123,15 @@ typedef struct {
     SMCBytes_t              bytes;
 } SMCVal_t;
 
-kern_return_t SMCOpen(io_connect_t *conn);
-kern_return_t SMCReadKey(UInt32Char_t key, SMCVal_t *val);
-kern_return_t SMCReadKey2(UInt32Char_t key, SMCVal_t *val, io_connect_t conn);
-kern_return_t SMCWriteSimple(UInt32Char_t key,char *wvalue, io_connect_t conn);
-void smc_init();
-void smc_close();
+kern_return_t smcOpen(io_connect_t *conn);
+kern_return_t smcReadKey(UInt32Char_t key, SMCVal_t *val);
+kern_return_t smcReadKey2(UInt32Char_t key, SMCVal_t *val, io_connect_t conn);
+kern_return_t smcWriteSimple(UInt32Char_t key,char *wvalue, io_connect_t conn);
+void smcInit();
+void smcClose();
+kern_return_t smcPrintAll(void);
+void printVal(SMCVal_t val);
 void printBytesHex(SMCVal_t val);
+int getIntValue(SMCVal_t val, int* result);
+unsigned int getUIntValue(SMCVal_t val, unsigned int* result);
+int getFloatValue(SMCVal_t val, float* result);
