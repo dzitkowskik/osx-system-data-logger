@@ -6,6 +6,18 @@
 //  Copyright (c) 2014 Karol Dzitkowski. All rights reserved.
 //
 
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <grp.h>
+#include <langinfo.h>
+#include <stdint.h>
+#include <pwd.h>
 #include "files_management.h"
 #include "errors.h"
 #define N 1024

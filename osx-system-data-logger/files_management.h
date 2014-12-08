@@ -11,19 +11,7 @@
 
 #define _GNU_SOURCE
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
-#include <fcntl.h>
 #include <dirent.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <grp.h>
-#include <langinfo.h>
-#include <stdint.h>
-#include <pwd.h>
 
 #if defined(WIN32)
 #  define DIR_SEPARATOR '\\'

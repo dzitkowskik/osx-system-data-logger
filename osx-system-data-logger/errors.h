@@ -18,6 +18,7 @@
 perror(source),kill(0,SIGKILL),\
 exit(EXIT_FAILURE))
 #endif
+
 #ifndef TEMP_FAILURE_RETRY
 #define TEMP_FAILURE_RETRY(expression) \
 ({ \
@@ -27,6 +28,7 @@ while (_result == -1L && errno == EINTR); \
 _result; \
 })
 #endif
+
 #ifndef CHECK_ERROR
 #define CHECK_ERROR(expression) \
 ({ \
@@ -36,6 +38,7 @@ kill(0,SIGKILL); \
 exit(EXIT_FAILURE);} \
 })
 #endif
+
 #ifndef TEMP_FAILURE_RETRY_WHEN_NULL
 #define TEMP_FAILURE_RETRY_WHEN_NULL(expression) \
 ({ \
@@ -45,6 +48,7 @@ while (_result == NULL && errno == EINTR); \
 _result; \
 })
 #endif
+
 #ifndef CHECK_ERROR_WHEN_NULL
 #define CHECK_ERROR_WHEN_NULL(expression) \
 ({ \

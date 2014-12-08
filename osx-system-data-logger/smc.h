@@ -78,6 +78,14 @@
 #define SMC_KEY_BATTERY_TEMP            "TB0T"
 #define SMC_KEY_CORE_VOLTAGE            "VC0C"
 
+// key names
+#define SMC_NAME_CPU_TEMP                "CPU TEMP"
+#define SMC_NAME_GPU_TEMP                "GPU TEMP"
+#define SMC_NAME_FAN_1                   "FAN 1"
+#define SMC_NAME_FAN_2                   "FAN 2"
+#define SMC_NAME_BATTERY_TEMP            "BATTERY TEMP"
+#define SMC_NAME_CORE_VOLTAGE            "CORE VOLTAGE"
+
 typedef struct {
     char                  major;
     char                  minor;
