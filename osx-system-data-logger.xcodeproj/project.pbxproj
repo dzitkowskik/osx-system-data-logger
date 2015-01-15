@@ -236,6 +236,7 @@
 		9F67BC031A268F3D009EAE56 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -243,6 +244,8 @@
 		9F67BC041A268F3D009EAE56 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

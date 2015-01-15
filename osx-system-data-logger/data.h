@@ -11,6 +11,7 @@
 
 typedef struct
 {
+    time_t timestamp;
     float core_voltage;
     float cpu_temp;
     float gpu_temp;

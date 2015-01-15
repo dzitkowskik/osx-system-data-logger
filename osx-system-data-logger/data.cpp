@@ -27,12 +27,14 @@ data getData()
     CHECK_ERROR( getFloatValue(val, &d.cpu_temp) );
     result = smcReadKey(const_cast<char*>(SMC_KEY_GPU_TEMP), &val);
     CHECK_ERROR( getFloatValue(val, &d.gpu_temp) );
+    d.timestamp = time(0);
     return d;
 }
 
 char* getDataLabels(const char sep)
 {
     string var =
+        string("timestamp") + sep +
         string(SMC_NAME_CORE_VOLTAGE) + sep +
         string(SMC_NAME_CPU_TEMP) + sep +
         string(SMC_NAME_GPU_TEMP);
@@ -42,10 +44,16 @@ char* getDataLabels(const char sep)
 
 char* dataToString(data* data)
 {
+    // convert timestamp to string form
+    string dt = string(ctime(&data->timestamp));
+    dt.erase(remove(dt.begin(), dt.end(), '\n'), dt.end());
+    
     string var =
+        string(dt) + "," +
         to_string(data->core_voltage) + "," +
         to_string(data->cpu_temp) + "," +
         to_string(data->gpu_temp);
+    
     return strdup(var.c_str());
 }
 

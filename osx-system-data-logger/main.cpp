@@ -95,6 +95,8 @@ int main(int argc, char** argv)
     int info_fd;
     int log_fd;
     
+    unsigned int speep_time_microseconds = 500*1000;
+    
     options* opt = initProgram(argc, argv);
     prepareFiles(info_fd, log_fd, opt);
     
@@ -102,7 +104,7 @@ int main(int argc, char** argv)
     while (do_work) // until sigint won't interrupt
     {
         work(info_fd, log_fd);
-        sleep(1);
+        usleep(speep_time_microseconds);
         printf("Appended %d entries\n", i++);
     }
     
