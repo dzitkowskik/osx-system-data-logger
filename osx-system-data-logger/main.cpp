@@ -76,7 +76,7 @@ void work(int info_fd, int log_fd)
     data pcData = getData();
     
     // Write to info file as binary serialized data
-    ssize_t charWritten = SafeWriteLine(info_fd, (char*)&pcData, sizeof(data));
+    ssize_t charWritten = SafeWrite(info_fd, (char*)&pcData, sizeof(data));
     if (charWritten != sizeof(data))
         FILE_ERR("Not all data written to info file");
     
@@ -90,8 +90,27 @@ void work(int info_fd, int log_fd)
     free(pdDataText);
 }
 
+int main2(int argc, char** argv)
+{
+    options* opt = initProgram(argc, argv);
+    data d;
+    printf("Row size = %lu\n", sizeof(data));
+    int fd = OpenFile(opt->data_file, O_RDONLY);
+    
+    for(int i=0; i<30; i++)
+    {
+        printf("Bytes read = %d\n", SafeRead(fd, (char*)&d, sizeof(data)));
+        printf("Data[%d]:   %s\n", i, dataToString(&d));
+    }
+
+    CHECK_ERROR( CloseFile(fd) );
+    exit(0);
+}
+
 int main(int argc, char** argv)
 {
+//    main2(argc, argv);
+    
     int info_fd;
     int log_fd;
     

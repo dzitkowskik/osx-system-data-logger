@@ -9,7 +9,7 @@
 #ifndef osx_system_data_logger_data_h
 #define osx_system_data_logger_data_h
 
-typedef struct
+typedef struct 
 {
     time_t timestamp;
     float core_voltage;
